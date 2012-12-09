@@ -12,7 +12,7 @@ endif
 
 let colors_name = "busierbee"
 
-" Vim >= 7.0 specific colors
+" Vim >= 7.0 specific colours
 if version >= 700
   hi CursorLine  ctermbg=234
   hi CursorColumn  ctermbg=234
@@ -21,7 +21,7 @@ if version >= 700
   hi PmenuSel  ctermfg=0 ctermbg=148
 endif
 
-" General colors
+" General colours
 hi Cursor  ctermbg=241
 hi Normal  ctermfg=253 ctermbg=234
 hi NonText  ctermfg=244 ctermbg=235
