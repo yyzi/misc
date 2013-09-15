@@ -6,3 +6,7 @@ set t_Co=256
 set softtabstop=2
 set shiftwidth=2
 set expandtab
+
+" show tabs and eol
+set list
+set listchars=tab:▸\ ,eol:¬
