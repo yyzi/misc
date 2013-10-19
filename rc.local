@@ -2,22 +2,27 @@
 clear
 
 # Build /etc/issue
-DIST=`cat /etc/system-release | sed 's/(.*)//;s/release //;s/^[ \t]*//;s/[ \t]*$//'`
-KERNEL=`uname -r`
-IP=`ifconfig eth0 | grep 'inet addr:' | cut -d":" -f2 | awk '{ print $1}'`
+DIST=$(cat /etc/system-release | sed 's/(.*)//;s/release //;s/^[ \t]*//;s/[ \t]*$//')
+KERNEL=$(uname -r)
+IP=$(ifconfig eth0 | grep 'inet addr:' | cut -d":" -f2 | awk '{ print $1}')
 echo -n "Waiting for network to come up"
 COUNTER=0
-while [[ -z $IP && COUNTER -lt 10 ]]; do
+while [[ -z $IP && $COUNTER -lt 10 ]]; do
   echo -n "."
   sleep 1
-  IP=`ifconfig eth0 | grep 'inet addr:' | cut -d":" -f2 | awk '{ print $1}'`
-  let COUNTER=COUNTER+1
+  IP=$(ifconfig eth0 | grep 'inet addr:' | cut -d":" -f2 | awk '{ print $1}')
+  let COUNTER=$COUNTER+1
   if [ $COUNTER -eq 10 ]; then
     IP="!!! ERROR !!!"
   fi
 done
-SSH_FINGERPRINT=`ssh-keygen -l -f /etc/ssh/ssh_host_rsa_key | cut -d" " -f2`
-echo "$DIST :: $KERNEL :: $IP" > /etc/issue
+SSH_FINGERPRINT=$(ssh-keygen -l -f /etc/ssh/ssh_host_rsa_key | cut -d" " -f2)
+echo "${DIST} :: ${KERNEL} :: ${IP}" > /etc/issue
 echo >> /etc/issue
-echo "SSH Fingerprint: $SSH_FINGERPRINT" >> /etc/issue
+echo "SSH Fingerprint: ${SSH_FINGERPRINT}" >> /etc/issue
 echo >> /etc/issue
+
+# populate /etc/hosts with a hostname entry
+HOSTNAME=$(hostname)
+sed -i '/'${HOSTNAME}'/d' /etc/hosts
+echo ${IP} ${HOSTNAME} >> /etc/hosts
